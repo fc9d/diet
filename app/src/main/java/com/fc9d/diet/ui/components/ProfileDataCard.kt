@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -14,11 +15,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.fc9d.diet.data.model.Profile
 import com.fc9d.diet.util.hasOneDecimalPlace
+import com.fc9d.diet.viewmodels.ItemDetails
+import com.fc9d.diet.viewmodels.ItemUiState
 
 @Composable
-fun ProfileDataCard(modifier: Modifier = Modifier, profile: Profile) {
+fun ProfileDataCard(
+    itemUiState: ItemUiState,
+    onItemValueChange: (ItemDetails) -> Unit,
+    onSaveClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Card(
         modifier = modifier,
         shape = RoundedCornerShape(15.dp),
@@ -40,58 +47,92 @@ fun ProfileDataCard(modifier: Modifier = Modifier, profile: Profile) {
 
         Row(Modifier.padding(horizontal = 10.dp)) {
             ProfileDataCell(
-                "키",
-                profile.height,
-                { height ->
-                    if (height.isEmpty()) profile.height = ""
-                    else if (height == "0") profile.height = ""
-                    else if (hasOneDecimalPlace(height)) {
-                        profile.height = height
+                labelText = "키",
+                valueText = itemUiState.itemDetails.height,
+                onValueChange = {
+                    when {
+                        it.isEmpty() || it == "0" -> onItemValueChange(
+                            itemUiState.itemDetails.copy(
+                                height = ""
+                            )
+                        )
+
+                        hasOneDecimalPlace(it) -> onItemValueChange(
+                            itemUiState.itemDetails.copy(
+                                height = it
+                            )
+                        )
                     }
                 },
-                Modifier.weight(1f)
+                modifier = Modifier.weight(1f)
             )
             Spacer(modifier = Modifier.width(10.dp))
             ProfileDataCell(
-                "몸무게",
-                profile.weight,
-                { weight ->
+                labelText = "몸무게",
+                valueText = itemUiState.itemDetails.weight,
+                onValueChange = {
+                    when {
+                        it.isEmpty() || it == "0" -> onItemValueChange(
+                            itemUiState.itemDetails.copy(
+                                weight = ""
+                            )
+                        )
 
-                    if (weight.isEmpty()) profile.weight = ""
-                    else if (weight == "0") profile.weight = ""
-                    else if (hasOneDecimalPlace(weight)) {
-                        profile.weight = weight
+                        hasOneDecimalPlace(it) -> onItemValueChange(
+                            itemUiState.itemDetails.copy(
+                                weight = it
+                            )
+                        )
                     }
                 },
-                Modifier.weight(1f)
+                modifier = Modifier.weight(1f)
             )
         }
         Row(Modifier.padding(horizontal = 10.dp)) {
             ProfileDataCell(
-                "나이",
-                profile.age,
-                { age ->
-                    if (age.toIntOrNull() != null) {
-                        if (age.toInt() > 0) profile.age = age
-                        else profile.age = ""
-                    } else if (age.isEmpty()) {
-                        profile.age = ""
+                labelText = "나이",
+                valueText = itemUiState.itemDetails.age,
+                onValueChange = {
+                    when {
+                        it.isEmpty() || it == "0" -> onItemValueChange(
+                            itemUiState.itemDetails.copy(
+                                age = ""
+                            )
+                        )
+                        else -> it.toIntOrNull()?.let { age ->
+                            if (age in 0..200) onItemValueChange(
+                                itemUiState.itemDetails.copy(
+                                    age = it
+                                )
+                            )
+                        }
                     }
                 },
-                Modifier.weight(1f)
+                modifier = Modifier.weight(1f)
             )
             Spacer(modifier = Modifier.width(10.dp))
-            ProfileDataGenderCell(Modifier.weight(1f))
+            ProfileDataGenderCell(
+                itemDetails = itemUiState.itemDetails,
+                onValueChange = onItemValueChange,
+                modifier = Modifier.weight(1f)
+            )
         }
         Spacer(modifier = Modifier.height(20.dp))
+
+        Button(
+            onClick = onSaveClick,
+            enabled = itemUiState.isValid
+        ) {
+            Text(text = "SAVE")
+        }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun ProfileDataCardPreview() {
-    ProfileDataCard(
-        modifier = Modifier,
-        Profile()
-    )
+//    ProfileDataCard(
+//        modifier = Modifier,
+//        viewModel()
+//    )
 }

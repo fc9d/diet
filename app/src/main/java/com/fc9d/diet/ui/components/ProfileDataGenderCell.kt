@@ -15,14 +15,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.fc9d.diet.data.model.Gender
+import com.fc9d.diet.viewmodels.ItemDetails
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileDataGenderCell(
+    itemDetails: ItemDetails,
+    onValueChange: (ItemDetails) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var expanded by remember { mutableStateOf(false) }
-    var selectedOptionText by remember { mutableStateOf("") }
 
     ExposedDropdownMenuBox(
         expanded = expanded,
@@ -32,7 +34,7 @@ fun ProfileDataGenderCell(
         OutlinedTextField(
             modifier = Modifier.menuAnchor(),
             readOnly = true,
-            value = selectedOptionText,
+            value = itemDetails.gender,
             onValueChange = {},
             label = {
                 Text(
@@ -51,8 +53,8 @@ fun ProfileDataGenderCell(
                 DropdownMenuItem(
                     text = { Text(gender.displayName) },
                     onClick = {
-                        selectedOptionText = gender.displayName
                         expanded = false
+                        onValueChange(itemDetails.copy(gender = gender.displayName))
                     },
                     contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
                 )
@@ -66,5 +68,5 @@ fun ProfileDataGenderCell(
 @Preview(showBackground = true)
 @Composable
 fun ProfileDataGenderCellPreview() {
-    ProfileDataGenderCell()
+    ProfileDataGenderCell(itemDetails = ItemDetails(gender = "남자"), {})
 }

@@ -1,24 +1,34 @@
 package com.fc9d.diet.data.model
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverter
 
 enum class Gender(val displayName: String) {
     MALE("남자"), FEMALE("여자")
 }
 
-class Profile {
-    var gender: Gender by mutableStateOf(Gender.MALE)
-    var weight: String by mutableStateOf("")
-    var age: String by mutableStateOf("")
-    var height: String by mutableStateOf("")
+@Entity(tableName = "profile")
+data class Profile(
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0,
+    val height: Double,
+    val weight: Double,
+    val age: Int,
+    val gender: Gender,
+)
 
-    val bmi: Double
-        get() {
-            if (weight.isNotEmpty() && weight.toDoubleOrNull() != null && height.isNotEmpty() && height.toDoubleOrNull() != null) {
-                return weight.toDouble() / (height.toDouble() * height.toDouble())
-            }
-            return 0.0
+class Converters {
+    @TypeConverter
+    fun fromGender(gender: Gender): String {
+        return gender.displayName
+    }
+
+    @TypeConverter
+    fun toGender(displayName: String): Gender? {
+        Gender.values().forEach {
+            if (it.displayName == displayName) return it
         }
+        return null
+    }
 }

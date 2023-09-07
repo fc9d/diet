@@ -7,21 +7,23 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.fc9d.diet.ui.AppViewModelProvider
 import com.fc9d.diet.ui.components.ProfileDataCard
 import com.fc9d.diet.ui.components.ProfileResultCard
-import com.fc9d.diet.ui.theme.AppTheme
 import com.fc9d.diet.viewmodels.ProfileViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun ProfileScreen(
     modifier: Modifier = Modifier,
-    profileViewModel: ProfileViewModel = viewModel(),
+    viewModel: ProfileViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
+    val coroutineScope = rememberCoroutineScope()
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -34,18 +36,16 @@ fun ProfileScreen(
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(start = 10.dp, top = 10.dp)
         )
-        val profile = profileViewModel.profile
-        ProfileDataCard(Modifier.padding(top = 20.dp), profile)
-        ProfileResultCard(Modifier.padding(top = 20.dp))
+        ProfileDataCard(
+            itemUiState = viewModel.itemUiState,
+            onItemValueChange = viewModel::updateUiState,
+            onSaveClick = {
+                coroutineScope.launch {
+                    viewModel.insert()
+                }
+            },
+            modifier = Modifier.padding(top = 20.dp),
+        )
         ProfileResultCard(Modifier.padding(top = 20.dp))
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ProfileScreenPreview() {
-    AppTheme {
-        ProfileScreen()
-    }
-
 }

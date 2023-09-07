@@ -24,7 +24,9 @@ fun ProfileDataCell(
 ) {
     OutlinedTextField(
         value = valueText,
-        onValueChange = onValueChange,
+        onValueChange = {
+            onValueChange(it)
+        },
         singleLine = true,
         label = {
             Text(
