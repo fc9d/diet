@@ -6,9 +6,11 @@ import kotlinx.coroutines.flow.Flow
 
 class OfflineProfileRepository(private val profileDao: ProfileDao) : ProfileRepository {
 
-    override suspend fun getProfile(): Flow<Profile?> = profileDao.getItem()
+    override fun getProfile(): Flow<Profile?> = profileDao.getItem()
 
-    override suspend fun insertProfile(item: Profile) = profileDao.insert(item)
+    override suspend fun insertProfile(item: Profile) {
+        profileDao.insert(item)
+    }
 
     override suspend fun updateProfile(item: Profile) = profileDao.update(item)
 }

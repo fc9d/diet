@@ -5,13 +5,29 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.fc9d.diet.data.model.Converters
 import com.fc9d.diet.data.model.Profile
 import com.fc9d.diet.data.repository.ProfileRepository
 import com.fc9d.diet.util.hasOneDecimalPlace
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 
 class ProfileViewModel(private val profileRepository: ProfileRepository) : ViewModel() {
 
+    val uiState: StateFlow<ItemUiState> = profileRepository.getProfile().map {
+        if (it != null) {
+            ItemUiState(it.fromProfile())
+        } else {
+            ItemUiState()
+        }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000L),
+        initialValue = ItemUiState()
+    )
     var itemUiState by mutableStateOf(ItemUiState())
 
     fun updateUiState(itemDetails: ItemDetails) {
@@ -52,8 +68,24 @@ data class ItemDetails(
 )
 
 fun ItemDetails.toProfile(): Profile = Profile(
+    id = 1,
     height = height.toDouble(),
     weight = weight.toDouble(),
     age = age.toInt(),
     gender = Converters().toGender(gender)!!
 )
+
+fun Profile.fromProfile(): ItemDetails = ItemDetails(
+    height = height.toFormattedString(),
+    weight = weight.toFormattedString(),
+    age = age.toString(),
+    gender = Converters().fromGender(gender)
+)
+
+fun Double.toFormattedString(): String {
+    return if (this % 1 == 0.0) {
+        "%.0f".format(this)
+    } else {
+        this.toString()
+    }
+}
