@@ -6,24 +6,29 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.fc9d.diet.util.hasOneDecimalPlace
 import com.fc9d.diet.viewmodels.ItemDetails
 import com.fc9d.diet.viewmodels.ItemUiState
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileDataCard(
     itemUiState: ItemUiState,
     onItemValueChange: (ItemDetails) -> Unit,
-    onSaveClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -46,68 +51,87 @@ fun ProfileDataCard(
         Spacer(modifier = Modifier.height(10.dp))
 
         Row(Modifier.padding(horizontal = 10.dp)) {
-            ProfileDataCell(
-                labelText = "키",
-                valueText = itemUiState.itemDetails.height,
+            OutlinedTextField(
+                value = itemUiState.itemDetails.height,
                 onValueChange = {
                     when {
                         it.isEmpty() || it == "0" -> onItemValueChange(
-                            itemUiState.itemDetails.copy(
-                                height = ""
-                            )
+                            itemUiState.itemDetails.copy(height = "")
                         )
 
                         hasOneDecimalPlace(it) -> onItemValueChange(
-                            itemUiState.itemDetails.copy(
-                                height = it
-                            )
+                            itemUiState.itemDetails.copy(height = it)
                         )
                     }
                 },
+                singleLine = true,
+                label = {
+                    Text(
+                        text = "키",
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Decimal,
+                    imeAction = ImeAction.Done
+                ),
                 modifier = Modifier.weight(1f)
             )
             Spacer(modifier = Modifier.width(10.dp))
-            ProfileDataCell(
-                labelText = "몸무게",
-                valueText = itemUiState.itemDetails.weight,
+            OutlinedTextField(
+                value = itemUiState.itemDetails.weight,
                 onValueChange = {
                     when {
                         it.isEmpty() || it == "0" -> onItemValueChange(
-                            itemUiState.itemDetails.copy(
-                                weight = ""
-                            )
+                            itemUiState.itemDetails.copy(weight = "")
                         )
 
                         hasOneDecimalPlace(it) -> onItemValueChange(
-                            itemUiState.itemDetails.copy(
-                                weight = it
-                            )
+                            itemUiState.itemDetails.copy(weight = it)
                         )
                     }
                 },
+                singleLine = true,
+                label = {
+                    Text(
+                        text = "몸무게",
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Decimal,
+                    imeAction = ImeAction.Done
+                ),
                 modifier = Modifier.weight(1f)
             )
         }
         Row(Modifier.padding(horizontal = 10.dp)) {
-            ProfileDataCell(
-                labelText = "나이",
-                valueText = itemUiState.itemDetails.age,
+            OutlinedTextField(
+                value = itemUiState.itemDetails.age,
                 onValueChange = {
                     when {
                         it.isEmpty() || it == "0" -> onItemValueChange(
-                            itemUiState.itemDetails.copy(
-                                age = ""
-                            )
+                            itemUiState.itemDetails.copy(age = "")
                         )
+
                         else -> it.toIntOrNull()?.let { age ->
                             if (age in 0..200) onItemValueChange(
-                                itemUiState.itemDetails.copy(
-                                    age = it
-                                )
+                                itemUiState.itemDetails.copy(age = it)
                             )
                         }
                     }
                 },
+                singleLine = true,
+                label = {
+                    Text(
+                        text = "나이",
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Decimal,
+                    imeAction = ImeAction.Done
+                ),
                 modifier = Modifier.weight(1f)
             )
             Spacer(modifier = Modifier.width(10.dp))
@@ -118,21 +142,14 @@ fun ProfileDataCard(
             )
         }
         Spacer(modifier = Modifier.height(20.dp))
-
-        Button(
-            onClick = onSaveClick,
-            enabled = itemUiState.isValid
-        ) {
-            Text(text = "SAVE")
-        }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun ProfileDataCardPreview() {
-//    ProfileDataCard(
-//        modifier = Modifier,
-//        viewModel()
-//    )
+    ProfileDataCard(
+        itemUiState = ItemUiState(),
+        onItemValueChange = {}
+    )
 }
