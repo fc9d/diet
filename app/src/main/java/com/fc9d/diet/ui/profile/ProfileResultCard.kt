@@ -1,4 +1,4 @@
-package com.fc9d.diet.ui.components
+package com.fc9d.diet.ui.profile
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth

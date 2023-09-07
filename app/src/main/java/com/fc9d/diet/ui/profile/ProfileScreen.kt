@@ -1,4 +1,4 @@
-package com.fc9d.diet.ui.screens
+package com.fc9d.diet.ui.profile
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -13,8 +13,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.fc9d.diet.ui.AppViewModelProvider
-import com.fc9d.diet.ui.components.ProfileDataCard
-import com.fc9d.diet.ui.components.ProfileResultCard
+import com.fc9d.diet.ui.profile.ProfileDataCard
+import com.fc9d.diet.ui.profile.ProfileResultCard
 import com.fc9d.diet.viewmodels.ProfileViewModel
 
 @Composable

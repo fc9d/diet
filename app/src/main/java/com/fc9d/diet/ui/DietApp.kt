@@ -13,9 +13,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.fc9d.diet.ui.navigation.BottomNavigationBar
 import com.fc9d.diet.ui.navigation.Screen
-import com.fc9d.diet.ui.screens.ChartScreen
-import com.fc9d.diet.ui.screens.HistoryScreen
-import com.fc9d.diet.ui.screens.ProfileScreen
+import com.fc9d.diet.ui.chart.ChartScreen
+import com.fc9d.diet.ui.history.HistoryScreen
+import com.fc9d.diet.ui.profile.ProfileScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -1,4 +1,4 @@
-package com.fc9d.diet.ui.components
+package com.fc9d.diet.ui.profile
 
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
