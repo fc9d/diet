@@ -8,50 +8,47 @@ import com.fc9d.diet.data.model.Profile
 import com.fc9d.diet.data.repository.ProfileRepository
 import com.fc9d.diet.util.hasOneDecimalPlace
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 
 class ProfileViewModel(private val profileRepository: ProfileRepository) : ViewModel() {
 
     // 이거는 읽기 전용..
-    val uiState: StateFlow<ItemUiState> = profileRepository.getProfile().map {
+    /*val uiState: StateFlow<ProfileUiState> = profileRepository.getProfile().map {
         if (it != null) {
-            ItemUiState(it.fromProfile())
+            ProfileUiState(it.fromProfile())
         } else {
-            ItemUiState()
+            ProfileUiState()
         }
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000L),
-        initialValue = ItemUiState()
-    )
+        initialValue = ProfileUiState()
+    )*/
 
-    private var _itemUiState = MutableStateFlow(ItemUiState())
-    val itemUiState: StateFlow<ItemUiState> = _itemUiState
+    private var _uiState = MutableStateFlow(ProfileUiState())
+    val uiState: StateFlow<ProfileUiState> = _uiState
 
     init {
         viewModelScope.launch {
             profileRepository.getProfile().collect {
                 if (it != null) {
-                    _itemUiState.value = ItemUiState(it.fromProfile())
+                    _uiState.value = ProfileUiState(it.fromProfile())
                 }
             }
         }
     }
 
 
-    fun updateUiState(itemDetails: ItemDetails) {
-        _itemUiState.value = ItemUiState(
-            itemDetails = itemDetails,
-            isValid = validateInput(itemDetails)
+    fun updateUiState(profileInfo: ProfileInfo) {
+        _uiState.value = ProfileUiState(
+            profileInfo = profileInfo,
+            isValid = validateInput(profileInfo)
         )
-        Log.i("taehee", "uistate : ${_itemUiState.value.itemDetails}")
+        Log.i("taehee", "uistate : ${_uiState.value.profileInfo}")
 
-        if (_itemUiState.value.isValid) {
+        if (_uiState.value.isValid) {
             viewModelScope.launch {
                 insert()
             }
@@ -60,11 +57,11 @@ class ProfileViewModel(private val profileRepository: ProfileRepository) : ViewM
 
     suspend fun insert() {
         if (validateInput()) {
-            profileRepository.insertProfile(_itemUiState.value.itemDetails.toProfile())
+            profileRepository.insertProfile(_uiState.value.profileInfo.toProfile())
         }
     }
 
-    private fun validateInput(uiState: ItemDetails = _itemUiState.value.itemDetails): Boolean {
+    private fun validateInput(uiState: ProfileInfo = _uiState.value.profileInfo): Boolean {
         return with(uiState) {
             if (age.toIntOrNull() == null || age.toIntOrNull()!! <= 0) return false
             if (weight.isEmpty() || !hasOneDecimalPlace(weight)) return false
@@ -75,12 +72,12 @@ class ProfileViewModel(private val profileRepository: ProfileRepository) : ViewM
     }
 }
 
-data class ItemUiState(
-    val itemDetails: ItemDetails = ItemDetails(),
+data class ProfileUiState(
+    val profileInfo: ProfileInfo = ProfileInfo(),
     val isValid: Boolean = false,
 )
 
-data class ItemDetails(
+data class ProfileInfo(
     val height: String = "",
     val weight: String = "",
     val age: String = "",
@@ -95,7 +92,7 @@ data class ItemDetails(
         }
 }
 
-fun ItemDetails.toProfile(): Profile = Profile(
+fun ProfileInfo.toProfile(): Profile = Profile(
     id = 1,
     height = height.toDouble(),
     weight = weight.toDouble(),
@@ -103,7 +100,7 @@ fun ItemDetails.toProfile(): Profile = Profile(
     gender = Converters().toGender(gender)!!
 )
 
-fun Profile.fromProfile(): ItemDetails = ItemDetails(
+fun Profile.fromProfile(): ProfileInfo = ProfileInfo(
     height = height.toFormattedString(),
     weight = weight.toFormattedString(),
     age = age.toString(),

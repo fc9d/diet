@@ -20,14 +20,14 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.fc9d.diet.util.hasOneDecimalPlace
-import com.fc9d.diet.viewmodels.ItemDetails
-import com.fc9d.diet.viewmodels.ItemUiState
+import com.fc9d.diet.viewmodels.ProfileInfo
+import com.fc9d.diet.viewmodels.ProfileUiState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileDataCard(
-    itemUiState: ItemUiState,
-    onItemValueChange: (ItemDetails) -> Unit,
+    profileInfo: ProfileInfo,
+    onItemValueChange: (ProfileInfo) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -51,15 +51,15 @@ fun ProfileDataCard(
 
         Row(Modifier.padding(horizontal = 10.dp)) {
             OutlinedTextField(
-                value = itemUiState.itemDetails.height,
+                value = profileInfo.height,
                 onValueChange = {
                     when {
                         it.isEmpty() || it == "0" -> onItemValueChange(
-                            itemUiState.itemDetails.copy(height = "")
+                            profileInfo.copy(height = "")
                         )
 
                         hasOneDecimalPlace(it) -> onItemValueChange(
-                            itemUiState.itemDetails.copy(height = it)
+                            profileInfo.copy(height = it)
                         )
                     }
                 },
@@ -78,15 +78,15 @@ fun ProfileDataCard(
             )
             Spacer(modifier = Modifier.width(10.dp))
             OutlinedTextField(
-                value = itemUiState.itemDetails.weight,
+                value = profileInfo.weight,
                 onValueChange = {
                     when {
                         it.isEmpty() || it == "0" -> onItemValueChange(
-                            itemUiState.itemDetails.copy(weight = "")
+                            profileInfo.copy(weight = "")
                         )
 
                         hasOneDecimalPlace(it) -> onItemValueChange(
-                            itemUiState.itemDetails.copy(weight = it)
+                            profileInfo.copy(weight = it)
                         )
                     }
                 },
@@ -106,16 +106,16 @@ fun ProfileDataCard(
         }
         Row(Modifier.padding(horizontal = 10.dp)) {
             OutlinedTextField(
-                value = itemUiState.itemDetails.age,
+                value = profileInfo.age,
                 onValueChange = {
                     when {
                         it.isEmpty() || it == "0" -> onItemValueChange(
-                            itemUiState.itemDetails.copy(age = "")
+                            profileInfo.copy(age = "")
                         )
 
                         else -> it.toIntOrNull()?.let { age ->
                             if (age in 0..200) onItemValueChange(
-                                itemUiState.itemDetails.copy(age = it)
+                                profileInfo.copy(age = it)
                             )
                         }
                     }
@@ -135,7 +135,7 @@ fun ProfileDataCard(
             )
             Spacer(modifier = Modifier.width(10.dp))
             ProfileDataGenderCell(
-                itemDetails = itemUiState.itemDetails,
+                profileInfo = profileInfo,
                 onValueChange = onItemValueChange,
                 modifier = Modifier.weight(1f)
             )
@@ -148,7 +148,7 @@ fun ProfileDataCard(
 @Composable
 fun ProfileDataCardPreview() {
     ProfileDataCard(
-        itemUiState = ItemUiState(),
+        profileInfo = ProfileUiState().profileInfo,
         onItemValueChange = {}
     )
 }

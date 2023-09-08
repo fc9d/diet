@@ -13,11 +13,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.fc9d.diet.viewmodels.ItemDetails
+import com.fc9d.diet.viewmodels.ProfileInfo
 
 @Composable
 fun ProfileResultCard(
-    itemDetails: ItemDetails,
+    profileInfo: ProfileInfo,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -29,7 +29,7 @@ fun ProfileResultCard(
     ) {
 
         Text(
-            text = "BMI (체질량 지수)",
+            text = "BMI",
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.padding(
                 start = 10.dp,
@@ -37,7 +37,7 @@ fun ProfileResultCard(
             )
         )
         Text(
-            text = "${itemDetails.bmi} : ${classifyBMI(itemDetails.bmi)}",
+            text = "${profileInfo.bmi} : ${classifyBMI(profileInfo.bmi)}",
             style = MaterialTheme.typography.titleSmall,
             modifier = modifier
                 .padding(horizontal = 10.dp)
@@ -60,6 +60,6 @@ fun classifyBMI(bmi: Double): String {
 @Preview
 @Composable
 fun ProfileResultCardPreview() {
-    ProfileResultCard(ItemDetails())
+    ProfileResultCard(ProfileInfo())
 }
 

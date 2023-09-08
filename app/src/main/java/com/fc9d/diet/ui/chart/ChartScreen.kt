@@ -10,7 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import com.fc9d.diet.ui.history.HistoryScreen
+import com.fc9d.diet.ui.record.HistoryScreen
 import com.fc9d.diet.ui.theme.AppTheme
 
 @Composable

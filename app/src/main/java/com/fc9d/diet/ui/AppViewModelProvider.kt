@@ -22,14 +22,21 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.fc9d.diet.DietApplication
 import com.fc9d.diet.viewmodels.ProfileViewModel
+import com.fc9d.diet.viewmodels.RecordViewModel
 
 /**
  * Provides Factory to create instance of ViewModel for the entire Inventory app
  */
-object AppViewModelProvider {
+object RecordViewModelProvider {
     val Factory = viewModelFactory {
+        initializer {
+            RecordViewModel(dietApplication().container.recordRepository)
+        }
+    }
+}
 
-        // Initializer for ItemEntryViewModel
+object ProfileViewModelProvider {
+    val Factory = viewModelFactory {
         initializer {
             ProfileViewModel(dietApplication().container.profileRepository)
         }

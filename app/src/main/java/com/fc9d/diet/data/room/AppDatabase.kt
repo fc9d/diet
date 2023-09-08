@@ -4,12 +4,17 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.fc9d.diet.data.model.Converters
 import com.fc9d.diet.data.model.Profile
+import com.fc9d.diet.data.model.Record
 
-@Database(entities = [Profile::class], version = 1, exportSchema = false)
+@Database(entities = [Profile::class, Record::class], version = 1, exportSchema = false)
+@TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun profileDao(): ProfileDao
+    abstract fun recordDao(): RecordDao
 
     companion object {
 

@@ -8,21 +8,20 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.fc9d.diet.ui.AppViewModelProvider
-import com.fc9d.diet.ui.profile.ProfileDataCard
-import com.fc9d.diet.ui.profile.ProfileResultCard
+import com.fc9d.diet.ui.ProfileViewModelProvider
 import com.fc9d.diet.viewmodels.ProfileViewModel
 
 @Composable
 fun ProfileScreen(
     modifier: Modifier = Modifier,
-    viewModel: ProfileViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    viewModel: ProfileViewModel = viewModel(factory = ProfileViewModelProvider.Factory),
 ) {
-    val itemUiState = viewModel.itemUiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -36,13 +35,13 @@ fun ProfileScreen(
             modifier = Modifier.padding(start = 10.dp, top = 10.dp)
         )
         ProfileDataCard(
-            itemUiState = itemUiState.value,
+            profileInfo = uiState.profileInfo,
             onItemValueChange = viewModel::updateUiState,
             modifier = Modifier.padding(top = 20.dp),
         )
-        if (itemUiState.value.itemDetails.bmi > 0) {
+        if (uiState.profileInfo.bmi > 0) {
             ProfileResultCard(
-                itemDetails = itemUiState.value.itemDetails,
+                profileInfo = uiState.profileInfo,
                 Modifier.padding(top = 20.dp)
             )
         }
