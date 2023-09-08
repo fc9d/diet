@@ -1,19 +1,22 @@
 package com.fc9d.diet.ui.record
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Create
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -28,25 +31,28 @@ fun HistoryScreen(
 ) {
     val recordUiState by viewModel.uiState.collectAsState()
 
-    LazyColumn(
+    Box(
         modifier = modifier
             .fillMaxSize()
             .padding(10.dp)
             .background(MaterialTheme.colorScheme.background)
     ) {
-        item {
-            Text(
-                text = "기록",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(start = 10.dp, top = 10.dp, bottom = 10.dp)
-            )
+        LazyColumn {
+            items(items = recordUiState.recordList, key = { it.id }) {
+                HistoryItem()
+            }
         }
-        items(items = recordUiState.recordList, key = { it.id }) {
-            HistoryItem()
+        FloatingActionButton(
+            onClick = { /*TODO*/ },
+            modifier = Modifier
+                .padding(16.dp)
+                .align(Alignment.BottomEnd), // 오른쪽 하단으로 정렬,
+            containerColor = MaterialTheme.colorScheme.primary,
+            shape = CircleShape
+        ) {
+            Icon(imageVector = Icons.Filled.Create, contentDescription = null)
         }
     }
-
 }
 
 @Preview(showBackground = true)
@@ -58,14 +64,6 @@ fun HistoryScreenPreview() {
                 .fillMaxSize()
                 .padding(10.dp)
         ) {
-            item {
-                Text(
-                    text = "기록",
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(start = 10.dp, top = 10.dp, bottom = 20.dp)
-                )
-            }
             items(100) {
                 HistoryItem()
             }
