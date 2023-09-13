@@ -1,6 +1,5 @@
 package com.fc9d.diet.ui
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -48,20 +47,22 @@ fun DietApp(
         },
         floatingActionButton = {}
     ) {
-        Box(modifier = Modifier.padding(it)) {
-            NavHost(navController = navController, startDestination = Screen.History.route) {
-                composable(Screen.History.route) {
-                    HistoryScreen()
-                    viewModel.updateUiState(uiState.copy(screenName = "기록"))
-                }
-                composable(Screen.Profile.route) {
-                    ProfileScreen()
-                    viewModel.updateUiState(uiState.copy(screenName = "프로필"))
-                }
-                composable(Screen.Chart.route) {
-                    ChartScreen()
-                    viewModel.updateUiState(uiState.copy(screenName = "차트"))
-                }
+        NavHost(
+            modifier = Modifier.padding(it),
+            navController = navController,
+            startDestination = Screen.History.route
+        ) {
+            composable(Screen.History.route) {
+                HistoryScreen()
+                viewModel.updateUiState(uiState.copy(screenName = "기록"))
+            }
+            composable(Screen.Profile.route) {
+                ProfileScreen()
+                viewModel.updateUiState(uiState.copy(screenName = "프로필"))
+            }
+            composable(Screen.Chart.route) {
+                ChartScreen()
+                viewModel.updateUiState(uiState.copy(screenName = "차트"))
             }
         }
     }

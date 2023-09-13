@@ -17,6 +17,6 @@ interface RecordDao {
     @Update
     suspend fun update(item: Record)
 
-    @Query("SELECT * from record")
+    @Query("SELECT * from record ORDER BY date DESC")
     fun getList(): Flow<List<Record>>
 }

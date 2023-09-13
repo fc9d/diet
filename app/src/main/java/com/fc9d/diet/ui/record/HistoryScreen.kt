@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.fc9d.diet.data.model.Record
 import com.fc9d.diet.ui.RecordViewModelProvider
 import com.fc9d.diet.ui.theme.AppTheme
 import com.fc9d.diet.viewmodels.RecordViewModel
@@ -37,13 +38,17 @@ fun HistoryScreen(
             .padding(10.dp)
             .background(MaterialTheme.colorScheme.background)
     ) {
-        LazyColumn {
-            items(items = recordUiState.recordList, key = { it.id }) {
-                HistoryItem()
-            }
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 10.dp)
+        ) {
+            items(items = recordUiState.recordList, key = { it.date }) { HistoryItem(it) }
         }
         FloatingActionButton(
-            onClick = { /*TODO*/ },
+            onClick = {
+                viewModel.setDialogVisible(true)
+            },
             modifier = Modifier
                 .padding(16.dp)
                 .align(Alignment.BottomEnd), // 오른쪽 하단으로 정렬,
@@ -51,6 +56,17 @@ fun HistoryScreen(
             shape = CircleShape
         ) {
             Icon(imageVector = Icons.Filled.Create, contentDescription = null)
+        }
+        if (viewModel.isDialogVisible) {
+            RecordInputScreen(
+                onClose = {
+                    viewModel.setDialogVisible(false)
+                },
+                onSuccess = {
+                    viewModel.saveRecord(it)
+                    viewModel.setDialogVisible(false)
+                },
+            )
         }
     }
 }
@@ -65,7 +81,12 @@ fun HistoryScreenPreview() {
                 .padding(10.dp)
         ) {
             items(100) {
-                HistoryItem()
+                HistoryItem(
+                    item = Record(
+                        weight = 80.0,
+                        date = "20230913"
+                    )
+                )
             }
         }
     }

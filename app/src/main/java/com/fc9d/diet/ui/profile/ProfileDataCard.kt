@@ -1,10 +1,9 @@
 package com.fc9d.diet.ui.profile
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
@@ -47,9 +46,13 @@ fun ProfileDataCard(
             )
         )
 
-        Spacer(modifier = Modifier.height(10.dp))
-
-        Row(Modifier.padding(horizontal = 10.dp)) {
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 10.dp)
+                .padding(vertical = 10.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
             OutlinedTextField(
                 value = profileInfo.height,
                 onValueChange = {
@@ -74,9 +77,10 @@ fun ProfileDataCard(
                     keyboardType = KeyboardType.Decimal,
                     imeAction = ImeAction.Done
                 ),
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(end = 5.dp)
             )
-            Spacer(modifier = Modifier.width(10.dp))
             OutlinedTextField(
                 value = profileInfo.weight,
                 onValueChange = {
@@ -101,10 +105,15 @@ fun ProfileDataCard(
                     keyboardType = KeyboardType.Decimal,
                     imeAction = ImeAction.Done
                 ),
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 5.dp)
             )
         }
-        Row(Modifier.padding(horizontal = 10.dp)) {
+        Row(
+            Modifier
+                .padding(horizontal = 10.dp)
+                .padding(bottom = 20.dp)) {
             OutlinedTextField(
                 value = profileInfo.age,
                 onValueChange = {
@@ -131,16 +140,18 @@ fun ProfileDataCard(
                     keyboardType = KeyboardType.Decimal,
                     imeAction = ImeAction.Done
                 ),
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(end = 5.dp)
             )
-            Spacer(modifier = Modifier.width(10.dp))
             ProfileDataGenderCell(
                 profileInfo = profileInfo,
                 onValueChange = onItemValueChange,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 5.dp)
             )
         }
-        Spacer(modifier = Modifier.height(20.dp))
     }
 }
 

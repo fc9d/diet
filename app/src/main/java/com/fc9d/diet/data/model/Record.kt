@@ -5,8 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "record")
 data class Record(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
-    val date: Long,
+    @PrimaryKey(autoGenerate = false)
+    val date: String,
     val weight: Double,
 )
