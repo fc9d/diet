@@ -13,12 +13,16 @@ import kotlinx.coroutines.launch
 
 class RecordViewModel(private val recordRepository: RecordRepository) : ViewModel() {
 
-    val uiState: StateFlow<RecordUiState> = recordRepository.getList().map {
-        RecordUiState(it)
+    val state: StateFlow<RecordState> = recordRepository.getList().map {
+        if (it.isEmpty()) {
+            RecordState.Error
+        } else {
+            RecordState.Success(it)
+        }
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000L),
-        initialValue = RecordUiState()
+        initialValue = RecordState.Loading
     )
 
     private val _isDialogVisible = mutableStateOf(false)
@@ -34,9 +38,10 @@ class RecordViewModel(private val recordRepository: RecordRepository) : ViewMode
             recordRepository.insertRecord(record)
         }
     }
-
-    data class RecordUiState(
-        val recordList: List<Record> = listOf(),
-    )
+    sealed class RecordState {
+        object Loading : RecordState()
+        data class Success(val data: List<Record>) : RecordState()
+        object Error : RecordState()
+    }
 
 }
