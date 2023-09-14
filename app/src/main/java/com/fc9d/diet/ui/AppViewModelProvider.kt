@@ -21,6 +21,7 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.fc9d.diet.DietApplication
+import com.fc9d.diet.viewmodels.ChartViewModel
 import com.fc9d.diet.viewmodels.MainViewModel
 import com.fc9d.diet.viewmodels.ProfileViewModel
 import com.fc9d.diet.viewmodels.RecordViewModel
@@ -49,6 +50,14 @@ object ProfileViewModelProvider {
     }
 }
 
+
+object ChartViewModelProvider {
+    val Factory = viewModelFactory {
+        initializer {
+            ChartViewModel(dietApplication().container.recordRepository)
+        }
+    }
+}
 
 fun CreationExtras.dietApplication(): DietApplication =
     (this[AndroidViewModelFactory.APPLICATION_KEY] as DietApplication)

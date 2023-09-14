@@ -12,6 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.fc9d.diet.data.model.Record
+import java.time.LocalDate
+
+import java.time.format.DateTimeFormatter
+
 
 @Composable
 fun HistoryItem(
@@ -39,6 +43,12 @@ fun String.toPrettyDate(): String {
     val month = substring(4, 6)
     val day = substring(6, 8)
     return "$year-$month-$day"
+}
+
+fun String.toChartFloat(): Float {
+    val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+    val date = LocalDate.parse(this, formatter)
+    return date.toEpochDay().toFloat()
 }
 
 @Preview(showBackground = true)

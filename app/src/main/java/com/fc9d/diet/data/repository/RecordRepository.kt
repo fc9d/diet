@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface RecordRepository {
     fun getList(): Flow<List<Record>>
+    fun getListForChart(): Flow<List<Record>>
 
     suspend fun insertRecord(record: Record)
 
