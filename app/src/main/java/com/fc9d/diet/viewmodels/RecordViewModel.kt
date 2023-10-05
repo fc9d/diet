@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fc9d.diet.data.model.Record
 import com.fc9d.diet.data.repository.RecordRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -33,11 +34,16 @@ class RecordViewModel(private val recordRepository: RecordRepository) : ViewMode
         _isDialogVisible.value = visible
     }
 
-    fun saveRecord(record: Record) {
-        viewModelScope.launch {
-            recordRepository.insertRecord(record)
+    fun insertRecord(record: Record) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                recordRepository.insertRecord(record)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
+
     sealed class RecordState {
         object Loading : RecordState()
         data class Success(val data: List<Record>) : RecordState()

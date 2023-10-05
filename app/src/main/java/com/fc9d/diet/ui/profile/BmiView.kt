@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.fc9d.diet.viewmodels.ProfileInfo
 
 @Composable
-fun ProfileResultCard(
+fun BmiView(
     profileInfo: ProfileInfo,
     modifier: Modifier = Modifier,
 ) {
@@ -59,7 +59,7 @@ fun classifyBMI(bmi: Double): String {
 
 @Preview
 @Composable
-fun ProfileResultCardPreview() {
-    ProfileResultCard(ProfileInfo())
+fun BmiViewPreview() {
+    BmiView(ProfileInfo())
 }
 

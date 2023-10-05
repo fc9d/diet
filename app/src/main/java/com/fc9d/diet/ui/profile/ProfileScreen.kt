@@ -34,7 +34,7 @@ fun ProfileScreen(
             modifier = Modifier.padding(top = 20.dp),
         )
         if (uiState.profileInfo.bmi > 0) {
-            ProfileResultCard(
+            BmiView(
                 profileInfo = uiState.profileInfo,
                 Modifier.padding(top = 20.dp)
             )
@@ -59,7 +59,7 @@ fun ProfileScreenPreview() {
             onItemValueChange = {},
             modifier = Modifier.padding(top = 20.dp),
         )
-        ProfileResultCard(
+        BmiView(
             profileInfo = ProfileInfo(),
             Modifier.padding(top = 20.dp)
         )
